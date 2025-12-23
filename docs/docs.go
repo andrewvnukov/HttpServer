@@ -669,7 +669,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api",
+	BasePath:         "/api/v2",
 	Schemes:          []string{"http"},
 	Title:            "Library Management REST API",
 	Description:      "Полное REST API для управления библиотекой с поддержкой версий v1 и v2",

@@ -21,7 +21,7 @@ import (
 // @license.name MIT
 // @license.url https://opensource.org/licenses/MIT
 // @host localhost:8080
-// @BasePath /api
+// @BasePath /api/v2
 // @schemes http
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header

@@ -19,7 +19,7 @@
         "version": "2.0.0"
     },
     "host": "localhost:8080",
-    "basePath": "/api",
+    "basePath": "/api/v2",
     "paths": {
         "/books": {
             "get": {

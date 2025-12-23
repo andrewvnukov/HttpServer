@@ -1,0 +1,461 @@
+basePath: /api
+definitions:
+  model.BookModel:
+    description: Информация о книге
+    properties:
+      author:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  model.User:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@libraryapi.com
+    name: API Support
+    url: https://www.libraryapi.com/support
+  description: Полное REST API для управления библиотекой с поддержкой версий v1 и
+    v2
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Library Management REST API
+  version: 2.0.0
+paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает полный список книг в коллекции
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список всех книг
+          schema:
+            items:
+              $ref: '#/definitions/model.BookModel'
+            type: array
+      summary: Получить все книги
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет книгу по указанному идентификатору
+      parameters:
+      - description: ID книги для удаления
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Book removed successfully
+          schema:
+            type: string
+      summary: Удалить книгу
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: Возвращает детальную информацию о книге по её идентификатору
+      parameters:
+      - description: ID книги
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Информация о книге
+          schema:
+            $ref: '#/definitions/model.BookModel'
+      summary: Получить книгу по ID
+      tags:
+      - books
+  /books/add:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Создает новую книгу с указанными параметрами
+      parameters:
+      - description: Название книги
+        example: '"Война и мир"'
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Автор книги
+        example: '"Лев Толстой"'
+        in: formData
+        name: author
+        required: true
+        type: string
+      - description: Цена книги
+        example: 599.99
+        in: formData
+        name: price
+        type: number
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Book added successfully
+          schema:
+            type: string
+      summary: Добавить новую книгу
+      tags:
+      - books
+  /books/update:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Обновляет данные книги по её идентификатору
+      parameters:
+      - description: ID книги для обновления
+        in: formData
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Новое название книги
+        example: '"Обновленное название"'
+        in: formData
+        name: name
+        type: string
+      - description: Новый автор
+        example: '"Новый автор"'
+        in: formData
+        name: author
+        type: string
+      - description: Новая цена
+        example: 699.99
+        in: formData
+        name: price
+        type: number
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Book updated successfully
+          schema:
+            type: string
+      summary: Обновить книгу
+      tags:
+      - books
+  /story:
+    get:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Создает новую запись о покупке или аренде книги пользователем
+      parameters:
+      - description: ID книги
+        example: 1
+        in: formData
+        name: book_id
+        required: true
+        type: integer
+      - description: ID пользователя
+        example: 1
+        in: formData
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Loan succesfully added
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Добавить новую покупку/аренду
+      tags:
+      - purchases
+  /story/book/{id}:
+    delete:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+    get:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+  /story/endpurchase/{id}:
+    put:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+  /story/id/{id}:
+    delete:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+    get:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+  /story/update/{id}:
+    put:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Обновляет данные существующей записи о покупке или аренде
+      parameters:
+      - description: ID записи о покупке
+        example: 1
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новый ID книги
+        example: 2
+        in: formData
+        name: book_id
+        type: integer
+      - description: Новый ID пользователя
+        example: 3
+        in: formData
+        name: user_id
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: Loan succesfully updated
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "404":
+          description: Запись не найдена
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновить информацию о покупке
+      tags:
+      - purchases
+  /story/user/{id}:
+    delete:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+    get:
+      description: Маршрутизирует запросы к соответствующим методам обработки истории
+        покупок
+      responses: {}
+      summary: Основной обработчик запросов истории покупок
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает полный список всех пользователей в системе
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список всех пользователей
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+      summary: Получить всех пользователей
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Удаляет пользователя из системы по его идентификатору
+      parameters:
+      - description: ID пользователя для удаления
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: User removed successfully!
+          schema:
+            type: string
+        "404":
+          description: Пользователь не найден
+          schema:
+            type: string
+        "500":
+          description: Ошибка удаления
+          schema:
+            type: string
+      summary: Удалить пользователя
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Возвращает детальную информацию о пользователе по его идентификатору
+      parameters:
+      - description: ID пользователя
+        in: path
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Информация о пользователе
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Неверный ID
+          schema:
+            type: string
+        "404":
+          description: Пользователь не найден
+          schema:
+            type: string
+      summary: Получить пользователя по ID
+      tags:
+      - users
+  /users/add:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Создает нового пользователя в системе
+      parameters:
+      - description: Имя пользователя
+        example: '"Алексей"'
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Фамилия пользователя
+        example: '"Петров"'
+        in: formData
+        name: surname
+        required: true
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: User added successfully!
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "409":
+          description: Пользователь уже существует
+          schema:
+            type: string
+        "500":
+          description: Ошибка добавления
+          schema:
+            type: string
+      summary: Добавить нового пользователя
+      tags:
+      - users
+  /users/update:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: Обновляет данные существующего пользователя
+      parameters:
+      - description: ID пользователя для обновления
+        in: formData
+        minimum: 1
+        name: id
+        required: true
+        type: integer
+      - description: Новое имя пользователя
+        example: '"Иван"'
+        in: formData
+        name: name
+        type: string
+      - description: Новая фамилия пользователя
+        example: '"Иванов"'
+        in: formData
+        name: surname
+        type: string
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: User updated successfully!
+          schema:
+            type: string
+        "400":
+          description: Неверные данные запроса
+          schema:
+            type: string
+        "404":
+          description: Пользователь не найден
+          schema:
+            type: string
+        "500":
+          description: Ошибка обновления
+          schema:
+            type: string
+      summary: Обновить пользователя
+      tags:
+      - users
+schemes:
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    description: API Key Authentication
+    in: header
+    name: X-API-Key
+    type: apiKey
+swagger: "2.0"

@@ -4,8 +4,12 @@ import (
 	"encoding/json"
 	"os"
 	"restapi/utils"
+
+	_ "restapi/docs" // Импорт сгенерированной документации
 )
 
+// BookModel представляет модель книги
+// @Description Информация о книге
 type BookModel struct {
 	Id     int     `json:"id"`
 	Name   string  `json:"name"`
@@ -13,11 +17,14 @@ type BookModel struct {
 	Price  float64 `json:"price"`
 }
 
+// Library представляет библиотеку книг
+// @Description Информация о библиотеке
 type Library struct {
 	Books      []BookModel `json:"books"`
 	TotalBooks int         `json:"total"`
 }
 
+// Books представляет интерфейс для работы с книгами
 type Books interface {
 	Get() error
 	Save() error
@@ -41,6 +48,9 @@ func BooksInit() Books {
 func (l *Library) Get() error {
 	data, err := os.ReadFile("./storage/books.json")
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil
+		}
 		return err
 	}
 	err = json.Unmarshal(data, &l)

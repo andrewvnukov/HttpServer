@@ -22,7 +22,8 @@ type Users struct {
 type UserHandler interface {
 	Get() error
 	Save() error
-	AddUser(user User)
+	AddUser(user User) error
+	UpdateUser(user User) error
 	RemoveUser(id int) error
 	GetUser(id int) []byte
 	GetAllUsers() []byte
@@ -63,16 +64,38 @@ func (u *Users) Save() error {
 	}
 }
 
-func (u *Users) AddUser(user User) {
+func (u *Users) AddUser(user User) error {
 	if u.Users == nil {
+		user.Id = 0
 		u.Users = []User{user}
 		u.Total = 1
 	} else {
+
+		user.Id = u.Total
 		u.Users = append(u.Users, user)
 		u.Total++
 	}
 
-	u.Save()
+	err := u.Save()
+	if err != nil {
+		return nil
+	} else {
+		return err
+	}
+}
+
+func (u *Users) UpdateUser(user User) error {
+	for i, us := range u.Users {
+		if us.Id == user.Id {
+			if i == len(u.Users)-1 {
+				u.Users = u.Users[:i]
+			} else {
+				u.Users = append(u.Users[:i], u.Users[i+1:]...)
+			}
+			return nil
+		}
+	}
+	return errors.New("id not found")
 }
 
 func (u *Users) RemoveUser(id int) error {
@@ -84,6 +107,7 @@ func (u *Users) RemoveUser(id int) error {
 				u.Users = append(u.Users[:i], u.Users[i+1:]...)
 			}
 			u.Total--
+			u.CheckUsers()
 			return nil
 		}
 	}
@@ -103,4 +127,9 @@ func (u *Users) GetAllUsers() []byte {
 }
 func (u *Users) GetCount() []byte {
 	return utils.MarshalThis(u.Total)
+}
+func (u *Users) CheckUsers() {
+	for i := range u.Users {
+		u.Users[i].Id = i
+	}
 }
